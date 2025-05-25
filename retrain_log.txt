@@ -1,0 +1,12 @@
+
+CatBoost filtered_cluster_0_balanced:
+AUROC: 0.9173
+Đã lưu model vào: catboost_model_cluster_0.cbm
+
+----------------------------------------
+
+CatBoost filtered_cluster_1_balanced:
+AUROC: 0.9016
+Đã lưu model vào: catboost_model_cluster_1.cbm
+
+----------------------------------------
