@@ -2,5 +2,6 @@ pandas
 numpy
 scikit-learn
 catboost
+flask
 # Optional for logging time, etc.
 # python-dateutil
