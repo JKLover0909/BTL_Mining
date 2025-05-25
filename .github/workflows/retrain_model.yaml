@@ -1,5 +1,8 @@
 name: Retrain Model
 
+permissions:                           # Cho phép GITHUB_TOKEN push code
+  contents: write  
+     
 on:
   push:
     paths:
