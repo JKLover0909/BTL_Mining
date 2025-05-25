@@ -23,7 +23,7 @@ def infer_from_row(input_csv, row_idx):
     input_row = df_input.iloc[row_idx].to_dict()
 
     # --- Step 1: Fill missing value ---
-    data_file = '/home/ubuntu/1/BTL_Mining/data_80_imputed_no_id.csv'
+    data_file = 'BTL_Mining/data_80_imputed_no_id.csv'
     df = pd.read_csv(data_file)
     for col in df.columns:
         if col not in input_row:
@@ -35,8 +35,8 @@ def infer_from_row(input_csv, row_idx):
     imputed_input = pd.DataFrame([imputed[-1]], columns=df.columns)
 
     # --- Step 2: Assign cluster ---
-    cluster0_path = '/home/ubuntu/1/BTL_Mining/cluster_0.csv'
-    cluster1_path = '/home/ubuntu/1/BTL_Mining/cluster_1.csv'
+    cluster0_path = 'BTL_Mining/cluster_0.csv'
+    cluster1_path = 'BTL_Mining/cluster_1.csv'
     cluster_0 = pd.read_csv(cluster0_path)
     cluster_1 = pd.read_csv(cluster1_path)
     drop_cols = [col for col in ['target', 'cluster'] if col in cluster_0.columns]
@@ -52,11 +52,11 @@ def infer_from_row(input_csv, row_idx):
 
     # --- Step 3: Extract important features ---
     if assigned_cluster == 0:
-        features_file = '/home/ubuntu/1/BTL_Mining/top_features_cluster_0.csv'
-        model_path = '/home/ubuntu/1/BTL_Mining/catboost_model_cluster_0.cbm'
+        features_file = 'BTL_Mining/top_features_cluster_0.csv'
+        model_path = 'BTL_Mining/catboost_model_cluster_0.cbm'
     else:
-        features_file = '/home/ubuntu/1/BTL_Mining/top_features_cluster_1.csv'
-        model_path = '/home/ubuntu/1/BTL_Mining/catboost_model_cluster_1.cbm'
+        features_file = 'BTL_Mining/top_features_cluster_1.csv'
+        model_path = 'BTL_Mining/catboost_model_cluster_1.cbm'
     top_features = pd.read_csv(features_file)['feature'].tolist()
     columns_to_save = top_features
     extracted = imputed_input[columns_to_save].copy()
