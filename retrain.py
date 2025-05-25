@@ -39,7 +39,7 @@ def retrain_from_csv(input_csv, log_file):
     drop_cols = [col for col in df_input.columns if col.lower() == 'id']
     df_input = df_input.drop(columns=drop_cols, errors='ignore')
 
-    data_file = 'BTL_Mining/data_80_imputed_no_id.csv'
+    data_file = 'data_80_imputed_no_id.csv'
     df = pd.read_csv(data_file)
     for col in df.columns:
         if col not in df_input.columns:
@@ -50,8 +50,8 @@ def retrain_from_csv(input_csv, log_file):
     imputed = imputer.fit_transform(concat_df)
     imputed_input = pd.DataFrame(imputed[-len(df_input):], columns=df.columns)
 
-    cluster0_path = 'BTL_Mining/cluster_0.csv'
-    cluster1_path = 'BTL_Mining/cluster_1.csv'
+    cluster0_path = 'cluster_0.csv'
+    cluster1_path = 'cluster_1.csv'
     cluster_0 = pd.read_csv(cluster0_path)
     cluster_1 = pd.read_csv(cluster1_path)
     drop_cols = [col for col in ['target', 'cluster'] if col in cluster_0.columns]
@@ -67,9 +67,9 @@ def retrain_from_csv(input_csv, log_file):
     data_by_cluster = {0: [], 1: []}
     for idx, assigned_cluster in enumerate(assigned_clusters):
         if assigned_cluster == 0:
-            features_file = 'BTL_Mining/top_features_cluster_0.csv'
+            features_file = 'top_features_cluster_0.csv'
         else:
-            features_file = 'BTL_Mining/top_features_cluster_1.csv'
+            features_file = 'top_features_cluster_1.csv'
         top_features = pd.read_csv(features_file)['feature'].tolist()
         row = imputed_input.iloc[idx][top_features].copy()
         data_by_cluster[assigned_cluster].append(row.values.tolist() + [df_input.iloc[idx]['target']])
@@ -78,12 +78,12 @@ def retrain_from_csv(input_csv, log_file):
     with open(log_file, "a") as logf:
         for cluster_id in [0, 1]:
             if cluster_id == 0:
-                features_file = 'BTL_Mining/top_features_cluster_0.csv'
-                model_path = 'BTL_Mining/catboost_model_cluster_0.cbm'
+                features_file = 'top_features_cluster_0.csv'
+                model_path = 'catboost_model_cluster_0.cbm'
                 cluster_name = "CatBoost filtered_cluster_0_balanced"
             else:
-                features_file = 'BTL_Mining/top_features_cluster_1.csv'
-                model_path = 'BTL_Mining/catboost_model_cluster_1.cbm'
+                features_file = 'top_features_cluster_1.csv'
+                model_path = 'catboost_model_cluster_1.cbm'
                 cluster_name = "CatBoost filtered_cluster_1_balanced"
             top_features = pd.read_csv(features_file)['feature'].tolist()
             rows = data_by_cluster[cluster_id]
