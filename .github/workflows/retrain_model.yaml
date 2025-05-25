@@ -1,0 +1,74 @@
+name: Retrain Model
+
+on:
+  push:
+    paths:
+      - 'data/**'
+
+jobs:
+  retrain_model:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Get changed CSV files
+      id: changed_csv
+      run: |
+        git fetch origin ${{ github.event.before }}
+        (git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^data/.*\.csv$' || true) > changed_csv.txt
+        ls -l changed_csv.txt
+
+    - name: Show changed files
+      run: |
+        echo "==== changed_csv.txt ===="
+        cat changed_csv.txt || echo "No changed files"
+        echo "==== END ===="
+
+    - name: Run retrain script
+      run: |
+        if [ -s changed_csv.txt ]; then
+          while read csvfile; do
+            python retrain.py "$csvfile" retrain_log.txt
+          done < changed_csv.txt
+        else
+          echo "No CSV files to retrain."
+        fi
+
+    - name: Commit & push retrain log + model
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        REPO:    ${{ github.repository }}
+        REF:     ${{ github.ref_name }}
+      run: |
+        set -e
+        git config --global user.email "12wuu115@gmail.com"
+        git config --global user.name  "JKLover0909"
+
+        # Thêm file (nếu tồn tại)
+        git add retrain_log.txt catboost_model_cluster_0.cbm catboost_model_cluster_1.cbm || true
+
+        # Chỉ commit khi có thay đổi
+        if git diff --cached --quiet; then
+          echo "No changes to commit"
+          exit 0
+        fi
+
+        git commit -m "Update retrain log and models [skip ci]"
+
+        # Ẩn token trong log
+        echo "::add-mask::$GH_TOKEN"
+
+        # Dùng x-access-token để tránh hiển thị username trong URL
+        git push "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" HEAD:"${REF}"

@@ -1,0 +1,48 @@
+
+CatBoost filtered_cluster_0_balanced:
+AUROC: 0.9173
+Recall: 0.0000
+Precision: 0.0000
+F1-score: 0.0000
+Classification report:
+              precision    recall  f1-score   support
+
+       False       0.93      1.00      0.96        95
+        True       0.00      0.00      0.00         7
+
+    accuracy                           0.93       102
+   macro avg       0.47      0.50      0.48       102
+weighted avg       0.87      0.93      0.90       102
+Đã lưu model vào: /home/ubuntu/1/BTL_Mining/catboost_model_cluster_0.cbm
+
+----------------------------------------
+
+CatBoost filtered_cluster_1_balanced:
+AUROC: 0.9016
+Recall: 0.0000
+Precision: 0.0000
+F1-score: 0.0000
+Classification report:
+              precision    recall  f1-score   support
+
+       False       0.87      1.00      0.93        61
+        True       0.00      0.00      0.00         9
+
+    accuracy                           0.87        70
+   macro avg       0.44      0.50      0.47        70
+weighted avg       0.76      0.87      0.81        70
+Đã lưu model vào: /home/ubuntu/1/BTL_Mining/catboost_model_cluster_1.cbm
+
+----------------------------------------
+
+CatBoost filtered_cluster_0_balanced:
+AUROC: 0.9173
+Đã lưu model vào: /home/ubuntu/1/BTL_Mining/catboost_model_cluster_0.cbm
+
+----------------------------------------
+
+CatBoost filtered_cluster_1_balanced:
+AUROC: 0.9016
+Đã lưu model vào: /home/ubuntu/1/BTL_Mining/catboost_model_cluster_1.cbm
+
+----------------------------------------
